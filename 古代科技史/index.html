@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>中国古代科技史 · 华夏之光</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Three.js 异步加载，不阻塞页面渲染 -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/three.js/r128/three.min.js" async></script>
+  <!-- 主脚本 defer：等 DOM 解析完再执行 -->
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+  <!-- ===== Three.js 3D 背景 ===== -->
+  <div id="three-container"></div>
+
+  <!-- ===== 烟雾效果层 ===== -->
+  <div class="mist mist-1"></div>
+  <div class="mist mist-2"></div>
+  <div class="mist mist-3"></div>
+
+  <!-- ===== 主应用包裹器 ===== -->
+  <div id="app">
+
+    <!-- ===== Hero 区域 ===== -->
+    <header class="hero">
+      <div class="hero-cloud hero-cloud-left"></div>
+      <div class="hero-cloud hero-cloud-right"></div>
+      <div class="hero-content">
+        <h1 class="hero-title">
+          <span class="title-char" data-char="华">华</span>
+          <span class="title-char" data-char="夏">夏</span>
+          <span class="title-char" data-char="之">之</span>
+          <span class="title-char" data-char="光">光</span>
+        </h1>
+        <p class="hero-subtitle">中国古代科技成就总览</p>
+        <p class="hero-desc">精选三十一项重大科技成就 · 跨越五千年的智慧结晶</p>
+        <div class="hero-seal-container">
+          <div class="hero-seal" id="heroSeal">
+            <div class="seal-border"></div>
+            <span class="seal-text">科</span>
+            <span class="seal-text">技</span>
+            <span class="seal-text seal-text-small">史</span>
+          </div>
+        </div>
+      </div>
+      <div class="scroll-hint">
+        <span class="scroll-arrow">▼</span>
+        <span class="scroll-text">向下滚动探索</span>
+      </div>
+    </header>
+
+    <!-- ===== 时间轴（蛇形曲折全页） ===== -->
+    <section class="timeline-page" id="timelinePage">
+      <h2 class="section-title">
+        <span class="section-title-decoration">━</span>
+        历史长河
+        <span class="section-title-decoration">━</span>
+      </h2>
+      <p class="timeline-page-sub">点击各朝代节点，查看该时期科技成就</p>
+      <div id="timelineTrack" class="timeline-track"></div>
+    </section>
+
+    <!-- ===== 筛选导航 ===== -->
+    <nav id="filterNav" class="filter-nav">
+      <div class="filter-inner">
+        <button class="filter-btn active" data-category="全部">全部</button>
+        <button class="filter-btn" data-category="天文学">🌙 天文学</button>
+        <button class="filter-btn" data-category="数学">🔢 数学</button>
+        <button class="filter-btn" data-category="农业与水利">🌾 农业与水利</button>
+        <button class="filter-btn" data-category="医学">🏥 医学</button>
+        <button class="filter-btn" data-category="四大发明">💡 四大发明</button>
+        <button class="filter-btn" data-category="其他重大发明">⚙️ 其他发明</button>
+        <span class="filter-hint">← → 方向键切换分类</span>
+      </div>
+    </nav>
+
+    <!-- ===== 科技卡片网格 ===== -->
+    <section class="cards-section">
+      <h2 class="section-title">
+        <span class="section-title-decoration">━</span>
+        科技成就
+        <span class="section-title-decoration">━</span>
+      </h2>
+      <div id="cardsGrid" class="cards-grid">
+        <div class="cards-loading">
+          <div class="loading-brush"></div>
+          <span>研磨翰墨，准备呈现……</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 反驳偏见专区 ===== -->
+    <section id="debunkSection" class="debunk-section">
+      <h2 class="section-title">
+        <span class="section-title-decoration">━</span>
+        正本清源 · 反驳偏见
+        <span class="section-title-decoration">━</span>
+      </h2>
+      <div class="debunk-grid">
+        <!-- 偏见一 -->
+        <div class="debunk-card">
+          <div class="debunk-header">
+            <span class="debunk-icon">❌</span>
+            <h3>偏见一："中国古代只有经验没有算法"</h3>
+          </div>
+          <div class="debunk-body">
+            <p>此说与史实严重不符。中国数学传统中蕴含丰富的算法思维与抽象推理：</p>
+            <ul>
+              <li><strong>《九章算术》方程术</strong>（约1世纪）：系统提出线性方程组解法——"遍乘直除"法，实质就是今天的高斯消元法，比西方早约1700年。</li>
+              <li><strong>祖冲之圆周率计算</strong>（5世纪）：利用割圆术求至正12288边形，得出3.1415926 &lt; π &lt; 3.1415927，精确至小数点后7位，领先世界近千年。此非单纯经验积累，而是严格的递推算法与误差分析。</li>
+              <li><strong>杨辉三角</strong>（13世纪）：系统记录了二项式系数排列规律（贾宪三角），明确给出增乘开方法与高次方程数值解法，比帕斯卡早约400年。</li>
+              <li><strong>秦九韶"大衍求一术"</strong>（1247年《数书九章》）：完整给出一次同余式组的系统解法，即中国剩余定理的核心算法，是纯正的数论推理。</li>
+              <li><strong>秦九韶高次方程数值解</strong>：提出"正负开方术"，可解任意高次方程，其算法结构与19世纪霍纳法（Horner's method）完全相同。</li>
+            </ul>
+            <p class="debunk-source">📚 参考：Needham J,《Science and Civilisation in China》, Vol.3; 吴文俊《中国数学史大系》</p>
+          </div>
+        </div>
+
+        <!-- 偏见二 -->
+        <div class="debunk-card">
+          <div class="debunk-header">
+            <span class="debunk-icon">❌</span>
+            <h3>偏见二："中国古代科技成果被邻居偷走了"</h3>
+          </div>
+          <div class="debunk-body">
+            <p>各项重大发明的中国原创性均有坚实的史料证据链，不存在"被窃"之说：</p>
+            <ul>
+              <li><strong>造纸术（蔡伦，105年）</strong>：《后汉书·蔡伦传》明确记载"伦乃造意，用树肤、麻头及敝布、鱼网以为纸。元兴元年奏上之。"现存最早的灞桥纸（前2世纪）更提前了200余年。造纸术通过唐军俘获的造纸工匠传入中亚，而非"失窃"。</li>
+              <li><strong>活字印刷（毕昇，1040年代）</strong>：沈括《梦溪笔谈·技艺》详细记载毕昇以胶泥刻字、火烧令坚的完整工艺流程。无任何争议。</li>
+              <li><strong>火药</strong>：唐代《真元妙道要略》已有硫磺、硝石、木炭配方的记载。《武经总要》（1044年）列三种火药配方，为世界最早火药配方文献。</li>
+              <li><strong>指南针</strong>：《韩非子·有度》载"先王立司南以端朝夕"。《梦溪笔谈》详述水浮、指甲、碗唇、缕悬四种磁针法。北宋朱彧《萍洲可谈》（1119年）首记海上指南针导航。</li>
+              <li><strong>蚕桑丝绸</strong>：山西夏县西阴村出土约5500年前的半颗蚕茧。商代甲骨文中已有"蚕""桑""丝""帛"等字。丝绸技术有完整的本土演化链，西传为"丝绸之路"贸易自然传播。</li>
+              <li><strong>瓷器</strong>：从商代原始青瓷到东汉成熟青瓷的演进序列完整，有各时期考古实物链。景德镇等遗址的地层堆积清晰显示技术发展脉络。</li>
+            </ul>
+            <p class="debunk-source">📚 参考：潘吉星《中国造纸史》；冯家昇《火药的发明和西传》；张白影《中国科技史》</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 底部 ===== -->
+    <footer class="site-footer">
+      <div class="footer-scroll-top"></div>
+      <div class="footer-content">
+        <h3>参考资料</h3>
+        <ul class="footer-refs">
+          <li>李约瑟.《中国科学技术史》(Science and Civilisation in China). 剑桥大学出版社</li>
+          <li>卢嘉锡 总主编.《中国科学技术史》丛书. 科学出版社</li>
+          <li>吴文俊 主编.《中国数学史大系》. 北京师范大学出版社</li>
+          <li>潘吉星.《中国造纸史》. 上海人民出版社</li>
+          <li>冯家昇.《火药的发明和西传》. 上海人民出版社</li>
+          <li>沈括.《梦溪笔谈》. 宋代</li>
+          <li>宋应星.《天工开物》. 明代</li>
+        </ul>
+      </div>
+      <p class="footer-copy">© 中国古代科技史 · 华夏之光 · 仅供学习参考</p>
+    </footer>
+  </div>
+
+  <!-- ===== 详情弹窗 ===== -->
+  <div id="modalOverlay" class="modal-overlay">
+    <div id="modalContent" class="modal-content">
+      <button id="modalClose" class="modal-close" title="关闭">&times;</button>
+      <div id="modalInner" class="modal-inner"></div>
+    </div>
+  </div>
+
+  <!-- ===== 返回顶部 ===== -->
+  <button id="backTop" class="back-top" title="返回顶部">▲</button>
+
+</body>
+</html>
