@@ -62,19 +62,36 @@
       <div id="timelineTrack" class="timeline-track"></div>
     </section>
 
-    <!-- ===== 筛选导航 ===== -->
-    <nav id="filterNav" class="filter-nav">
-      <div class="filter-inner">
-        <button class="filter-btn active" data-category="全部">全部</button>
-        <button class="filter-btn" data-category="天文学">🌙 天文学</button>
-        <button class="filter-btn" data-category="数学">🔢 数学</button>
-        <button class="filter-btn" data-category="农业与水利">🌾 农业与水利</button>
-        <button class="filter-btn" data-category="医学">🏥 医学</button>
-        <button class="filter-btn" data-category="四大发明">💡 四大发明</button>
-        <button class="filter-btn" data-category="其他重大发明">⚙️ 其他发明</button>
-        <span class="filter-hint">← → 方向键切换分类</span>
+    <!-- ===== 搜索框 + 筛选导航（合并吸顶） ===== -->
+    <div id="stickyHeader" class="sticky-header">
+      <div id="searchBar" class="search-bar">
+        <div class="search-inner">
+          <span class="search-icon">🔍</span>
+          <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            placeholder="搜索发明名称、人物、朝代……"
+            autocomplete="off"
+          />
+          <button id="searchClear" class="search-clear" title="清除搜索">&times;</button>
+        </div>
+        <span id="searchResultHint" class="search-result-hint"></span>
       </div>
-    </nav>
+
+      <nav id="filterNav" class="filter-nav">
+        <div class="filter-inner">
+          <button class="filter-btn active" data-category="全部">全部</button>
+          <button class="filter-btn" data-category="天文学">🌙 天文学</button>
+          <button class="filter-btn" data-category="数学">🔢 数学</button>
+          <button class="filter-btn" data-category="农业与水利">🌾 农业与水利</button>
+          <button class="filter-btn" data-category="医学">🏥 医学</button>
+          <button class="filter-btn" data-category="四大发明">💡 四大发明</button>
+          <button class="filter-btn" data-category="其他重大发明">⚙️ 其他发明</button>
+          <span class="filter-hint">← → 方向键切换分类</span>
+        </div>
+      </nav>
+    </div>
 
     <!-- ===== 科技卡片网格 ===== -->
     <section class="cards-section">

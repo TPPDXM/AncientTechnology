@@ -248,6 +248,7 @@ const eraData = [
 // ===== 全局状态 =====
 let activeCategory = '全部';
 let activeEra = null; // null = 不限朝代
+let searchQuery = '';
 
 // ===== DOM 元素引用 =====
 const cardsGrid = document.getElementById('cardsGrid');
@@ -259,6 +260,9 @@ const modalContent = document.getElementById('modalContent');
 const backTopBtn = document.getElementById('backTop');
 const filterNav = document.getElementById('filterNav');
 const filterBtns = document.querySelectorAll('.filter-btn');
+const searchInput = document.getElementById('searchInput');
+const searchClear = document.getElementById('searchClear');
+const searchResultHint = document.getElementById('searchResultHint');
 const threeContainer = document.getElementById('three-container');
 const heroSeal = document.getElementById('heroSeal');
 
@@ -409,6 +413,19 @@ function renderCards() {
 function filterData() {
   let result = techData;
 
+  // 文本搜索（名称、分类、发明者、朝代、描述）
+  if (searchQuery.trim() !== '') {
+    const q = searchQuery.trim().toLowerCase();
+    result = result.filter(item =>
+      item.name.toLowerCase().includes(q) ||
+      item.category.toLowerCase().includes(q) ||
+      item.inventor.toLowerCase().includes(q) ||
+      item.period.toLowerCase().includes(q) ||
+      item.era.toLowerCase().includes(q) ||
+      item.desc.toLowerCase().includes(q)
+    );
+  }
+
   // 先按分类筛选
   if (activeCategory !== '全部') {
     result = result.filter(item => item.category === activeCategory);
@@ -488,12 +505,23 @@ modalOverlay.addEventListener('click', (e) => {
 
 // ESC 关闭弹窗
 document.addEventListener('keydown', (e) => {
+  // ESC 键处理
   if (e.key === 'Escape') {
+    // 优先：搜索框聚焦时清空搜索
+    if (document.activeElement === searchInput) {
+      searchInput.value = '';
+      searchQuery = '';
+      updateSearchUI();
+      renderAllCards();
+      searchInput.blur();
+      return;
+    }
+    // 其次：关闭弹窗
     closeModal();
   }
 
-  // 左右方向键切换分类筛选
-  if (!modalOverlay.classList.contains('active')) {
+  // 左右方向键切换分类筛选（弹窗打开时不可用）
+  if (!modalOverlay.classList.contains('active') && document.activeElement !== searchInput) {
     const categories = ['全部', '天文学', '数学', '农业与水利', '医学', '四大发明', '其他重大发明'];
     const currentIndex = categories.indexOf(activeCategory);
     if (e.key === 'ArrowRight' && currentIndex < categories.length - 1) {
@@ -502,12 +530,24 @@ document.addEventListener('keydown', (e) => {
       setCategory(categories[currentIndex - 1]);
     }
   }
+
+  // Ctrl+K 或 / 快速聚焦搜索框（不在输入框或弹窗中时）
+  if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && !modalOverlay.classList.contains('active')) {
+    if ((e.ctrlKey && e.key === 'k') || e.key === '/') {
+      e.preventDefault();
+      searchInput.focus();
+      searchInput.select();
+    }
+  }
 });
 
 // ===== 分类筛选 =====
 function setCategory(category) {
   activeCategory = category;
   activeEra = null;
+  searchQuery = '';
+  searchInput.value = '';
+  updateSearchUI();
   updateTimelineActive();
   updateFilterButtons();
   renderAllCards();
@@ -583,10 +623,12 @@ function handleParallax() {
 
 // ===== 筛选导航 sticky 效果 =====
 function handleStickyNav() {
+  const stickyHeader = document.querySelector('.sticky-header');
+  if (!stickyHeader) return;
   if (window.scrollY > 100) {
-    filterNav.classList.add('sticky-active');
+    stickyHeader.classList.add('sticky-active');
   } else {
-    filterNav.classList.remove('sticky-active');
+    stickyHeader.classList.remove('sticky-active');
   }
 }
 
@@ -848,12 +890,53 @@ function removeLoadingIndicator() {
   }, { passive: false });
 })();
 
+// ===== 搜索功能 =====
+function updateSearchUI() {
+  // 清除按钮可见性
+  if (searchQuery.trim() !== '') {
+    searchClear.classList.add('visible');
+  } else {
+    searchClear.classList.remove('visible');
+  }
+
+  // 结果提示
+  const filtered = filterData();
+  if (searchQuery.trim() !== '') {
+    searchResultHint.textContent = `找到 ${filtered.length} 项匹配发明`;
+    searchResultHint.classList.add('visible');
+  } else {
+    searchResultHint.textContent = '';
+    searchResultHint.classList.remove('visible');
+  }
+}
+
+function handleSearch() {
+  searchQuery = searchInput.value;
+  updateSearchUI();
+  renderAllCards();
+  // 自动滚动到卡片区，避免吸顶栏遮挡
+  document.querySelector('.cards-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// 搜索输入事件（实时筛选）
+searchInput.addEventListener('input', handleSearch);
+
+// 清除按钮
+searchClear.addEventListener('click', () => {
+  searchInput.value = '';
+  searchQuery = '';
+  updateSearchUI();
+  renderAllCards();
+  searchInput.focus();
+});
+
 // ===== 初始化 =====
 function init() {
   buildTimeline();
   renderAllCards();
   removeLoadingIndicator();
   updateFilterButtons();
+  updateSearchUI();
   initScrollHint();
   handleBackTopVisibility();
 }
